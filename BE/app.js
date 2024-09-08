@@ -1,3 +1,5 @@
+require("dotenv").config({ path: "./.env.dev" });
+
 const express = require("express");
 const cors = require("cors");
 const route = require("./route/index.js");

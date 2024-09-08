@@ -23,7 +23,7 @@ const query = async (queryString, params, response) => {
     try {
       const [rows] = await connection.execute(queryString, params);
       connection.release();
-      return rows;
+      return [rows];
     } catch (error) {
       console.error("Query Error");
       console.error(error);
