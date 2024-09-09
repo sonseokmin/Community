@@ -1,4 +1,4 @@
-// 전체 API 응답 경로 정의 파일
+/* 전체 API 응답 경로 정의 파일 */
 
 const express = require("express");
 const postRoute = require("./postRoute.js");

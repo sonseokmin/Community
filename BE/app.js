@@ -1,3 +1,5 @@
+/* 서버 실행 메인 파일 */
+
 require("dotenv").config({ path: "./.env.dev" });
 
 const express = require("express");
