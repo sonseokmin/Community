@@ -1,6 +1,6 @@
 /* 게시판 공통 기능 정의 파일 */
 
-// API 요청 기능 로드
+// 모든 게시판 게시글 API 요청 기능 로드
 import { getPosts } from "../api/api.js";
 
 // 현재 URL을 '/'로 분할하여 배열로 변환합니다.
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const postTitle = document.createElement("a");
         postTitle.innerText = data.title;
         postTitle.className = "post";
-        postTitle.href = `../read/read.html?id=${data.id}`;
+        postTitle.href = `./view.html?id=${data.id}&type=${data.type}`;
 
         const postContent = document.createElement("span");
         postContent.innerText = data.content;
