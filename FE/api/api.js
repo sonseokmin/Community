@@ -1,4 +1,4 @@
-// API 요청 파일
+/* API 요청 파일 */
 
 // 기본 URL
 const API_BASE_URL = "http://127.0.0.1:3000";
