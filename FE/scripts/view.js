@@ -3,7 +3,8 @@
 // 특정 게시글 API 요청 기능 로드
 import { getPost } from "../api/api.js";
 
-import { goMainPage } from "../scripts/place.js";
+// main 페이지 이동 함수
+import { goMainPage, goWritePage } from "../scripts/place.js";
 
 // Qurry String Value 추출 함수
 function getQueryParam(param) {
@@ -15,15 +16,25 @@ function getQueryParam(param) {
 const id = parseInt(getQueryParam("id"));
 const type = getQueryParam("type");
 
+// main으로 돌아가기 함수
+const backMainButton = document.getElementById("backMainPage");
+
+backMainButton.addEventListener("click", () => {
+  goMainPage(type);
+});
+
+// write 페이지로 이동하기 함수 (update)
+const goWriteButton = document.getElementById("goWritePage");
+
+goWriteButton.addEventListener("click", () => {
+  goWritePage(id, type);
+});
+
 // html 파일이 로드됐을 때
 document.addEventListener("DOMContentLoaded", async function () {
-  const postTitle = document.getElementById("title");
-  const postContent = document.getElementById("content");
-  const backPageButton = document.getElementById("back_page");
+  const postTitle = document.getElementById("title"); // 제목
+  const postContent = document.getElementById("content"); // 내용
 
-  backPageButton.addEventListener("click", () => {
-    goMainPage(type); // import한 goMainPage 함수 호출
-  });
   try {
     const response = await getPost(id);
 

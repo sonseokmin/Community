@@ -3,14 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="module" src="../scripts/write.js"></script>
     <link rel="stylesheet" href="/FE/styles/write.css" />
     <title>Write</title>
   </head>
   <body>
     <div class="container">
       <div class="header">
-        <button type="button" onclick="">작성하기</button>
-        <button type="button" onclick="">돌아가기</button>
+        <button type="button" id="write">작성하기</button>
+        <button type="button" id="backMainPage">돌아가기</button>
       </div>
       <div class="input-group">
         <input id="title" type="text" placeholder="제목 입력란" />
