@@ -1,10 +1,7 @@
-/* 게시판 게시글 작성 */
+/* 게시판 게시글 작성 & 수정 */
 
 // 게시판 게시글 작성하기 API 요청 함수
-import { writePost } from "../api/api.js";
-
-// main 페이지 이동 함수
-import { goMainPage, goWritePage } from "../scripts/place.js";
+import { getPost, writePost, updatePost } from "../api/api.js";
 
 // 작성하기 버튼
 const write = document.getElementById("write");
@@ -15,26 +12,58 @@ function getQueryParam(param) {
   return urlParams.get(param);
 }
 
-// Qurry String 게시판 값 할당
+// Qurry String  값 할당
 const type = getQueryParam("type");
-
-const backMainPage = document.getElementById("backMainPage"); // 돌아가기
+const id = getQueryParam("id");
 
 // 돌아가기
+const backMainPage = document.getElementById("backMainPage");
+
 backMainPage.addEventListener("click", () => {
-  goMainPage(type);
+  window.location.href = `../community/${type.toLowerCase()}.html`;
 });
+
+// 제목
+const titleBox = document.getElementById("title");
+// 내용
+const contentBox = document.getElementById("content");
 
 // 작성하기를 클릭했을 때
 write.addEventListener("click", async function () {
-  const title = document.getElementById("title").value; // 제목
-  const content = document.getElementById("content").value; // 내용
+  //UPDATE
+  if (id) {
+    const data = {
+      id: id,
+      title: titleBox.value, // 제목
+      content: contentBox.value, // 내용
+      type: type, // 게시판
+    };
 
-  const data = {
-    title: title, // 제목
-    content: content, // 내용
-    type: type, // 게시판
-  };
+    await updatePost(data); // 게시글 수정 요청
 
-  await writePost(data);
+    window.location.href = `../community/${type.toLowerCase()}.html`; // 메인 페이지로 이동
+  } // WRITE
+  else {
+    const data = {
+      title: titleBox.value, // 제목
+      content: contentBox.value, // 내용
+      type: type, // 게시판
+    };
+
+    await writePost(data); // 게시글 작성 요청
+
+    window.location.href = `../community/${type.toLowerCase()}.html`; // 메인 페이지로 이동
+  }
+});
+
+// html 파일이 로드됐을 때 (UPDATE 전용)
+document.addEventListener("DOMContentLoaded", async () => {
+  if (id) {
+    const response = await getPost(id); // 게시글 조회
+
+    const data = response.data[0];
+
+    titleBox.value = data.title;
+    contentBox.value = data.content;
+  }
 });

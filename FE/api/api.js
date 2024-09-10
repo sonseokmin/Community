@@ -15,6 +15,7 @@ export async function getPosts(type) {
   }
 }
 
+// 특정 게시글 조회 API
 export async function getPost(id) {
   try {
     const response = await fetch(`${API_BASE_URL}/community/view/${id}`);
@@ -25,6 +26,7 @@ export async function getPost(id) {
   }
 }
 
+// 게시판 게시글 작성 API
 export async function writePost(data) {
   try {
     const response = await fetch(`${API_BASE_URL}/community/${data.type}`, {
@@ -34,6 +36,24 @@ export async function writePost(data) {
       },
       body: JSON.stringify(data),
     });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+// 게시글 수정 API
+export async function updatePost(data) {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/community/${data.type}/${data.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json", // JSON 형식의 데이터임을 명시
+        },
+        body: JSON.stringify(data),
+      }
+    );
   } catch (err) {
     console.log(err);
   }

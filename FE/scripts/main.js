@@ -3,9 +3,6 @@
 // 모든 게시판 게시글 API 요청 함수
 import { getPosts } from "../api/api.js";
 
-// write 페이지 이동 함수
-import { goWritePage } from "./place.js";
-
 // 현재 URL을 '/'로 분할하여 배열로 변환합니다.
 const urlArray = document.URL.split("/");
 
@@ -24,6 +21,13 @@ urlArray.forEach((part) => {
   if (board[part] || part === board[part]) {
     type = board[part] || part; // board 값 또는 요소 할당
   }
+});
+
+// 작성하기 이동
+const writeButton = document.getElementById("writeButton");
+
+writeButton.addEventListener("click", () => {
+  window.location.href = `../community/write.html?type=${type.toLowerCase()}`; // 작성 페이지로 이동
 });
 
 // html 파일이 로드됐을 때
@@ -53,12 +57,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         li.appendChild(postContent);
 
         postList.appendChild(li);
-      });
-
-      const writeButton = document.getElementById("writeButton");
-
-      writeButton.addEventListener("click", () => {
-        goWritePage(type);
       });
     } catch (error) {
       console.error("Error fetching posts:", error);

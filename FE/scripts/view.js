@@ -3,9 +3,6 @@
 // 특정 게시글 API 요청 기능 로드
 import { getPost } from "../api/api.js";
 
-// main 페이지 이동 함수
-import { goMainPage, goWritePage } from "../scripts/place.js";
-
 // Qurry String Value 추출 함수
 function getQueryParam(param) {
   const urlParams = new URLSearchParams(window.location.search);
@@ -20,14 +17,7 @@ const type = getQueryParam("type");
 const backMainButton = document.getElementById("backMainPage");
 
 backMainButton.addEventListener("click", () => {
-  goMainPage(type);
-});
-
-// write 페이지로 이동하기 함수 (update)
-const goWriteButton = document.getElementById("goWritePage");
-
-goWriteButton.addEventListener("click", () => {
-  goWritePage(id, type);
+  window.location.href = `../community/${type.toLowerCase()}.html`; // 메인 페이지로 이동
 });
 
 // html 파일이 로드됐을 때
@@ -36,12 +26,18 @@ document.addEventListener("DOMContentLoaded", async function () {
   const postContent = document.getElementById("content"); // 내용
 
   try {
-    const response = await getPost(id);
+    const response = await getPost(id); // 게시글 조회
 
     const data = response.data[0];
 
     postTitle.innerText = data.title;
     postContent.innerText = data.content;
+
+    const goWriteButton = document.getElementById("goWritePage");
+
+    goWriteButton.addEventListener("click", () => {
+      window.location.href = `../community/write.html?id=${id}&type=${type.toLowerCase()}`; // 수정 페이지로 이동
+    });
   } catch (err) {
     console.log(err);
   }
