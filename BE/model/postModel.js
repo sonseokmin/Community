@@ -32,6 +32,7 @@ exports.getPost = async (req, res) => {
   }
 };
 
+// 게시글 작성
 exports.writePost = async (req, res) => {
   const sql = `
   INSERT
@@ -43,6 +44,25 @@ exports.writePost = async (req, res) => {
       req.title,
       req.content,
       req.type,
+    ]);
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+// 게시글 수정
+exports.updatePost = async (req, res) => {
+  const sql = `
+  UPDATE posts
+  SET title = ? , content = ?
+  WHERE id = ?;
+  `;
+  try {
+    const [result] = await dbConnect.query(sql, [
+      req.title,
+      req.content,
+      req.id,
     ]);
     return result;
   } catch (err) {

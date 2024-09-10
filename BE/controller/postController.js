@@ -45,3 +45,17 @@ exports.writePost = async (req, res) => {
     console.log(err);
   }
 };
+
+// 게시글 수정
+exports.updatePost = async (req, res) => {
+  try {
+    const response = await postModel.updatePost(req.body);
+    return res.status(200).json({
+      status: 200,
+      message: "Success",
+      data: response,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
