@@ -2,28 +2,44 @@
 
 const postModel = require("../model/postModel.js");
 
+// 게시판 전체 조회
 exports.getPosts = async (req, res) => {
   const category = req.params.board;
   try {
-    const responseData = await postModel.getPosts(category);
+    const response = await postModel.getPosts(category);
     return res.status(200).json({
       status: 200,
       message: "Success",
-      data: responseData,
+      data: response,
     });
   } catch (err) {
     console.log(err);
   }
 };
 
+// 게시글 상세 조회
 exports.getPost = async (req, res) => {
   const id = req.params.id;
   try {
-    const responseData = await postModel.getPost(id);
+    const response = await postModel.getPost(id);
     return res.status(200).json({
       status: 200,
       message: "Success",
-      data: responseData,
+      data: response,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+// 게시글 작성
+exports.writePost = async (req, res) => {
+  try {
+    const response = await postModel.writePost(req.body);
+    return res.status(200).json({
+      status: 200,
+      message: "Success",
+      data: response,
     });
   } catch (err) {
     console.log(err);

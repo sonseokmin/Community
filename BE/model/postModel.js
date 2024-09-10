@@ -31,3 +31,21 @@ exports.getPost = async (req, res) => {
     console.log(err);
   }
 };
+
+exports.writePost = async (req, res) => {
+  const sql = `
+  INSERT
+  INTO posts (title, content, type)
+  VALUES (?, ?, ?)
+  `;
+  try {
+    const [result] = await dbConnect.query(sql, [
+      req.title,
+      req.content,
+      req.type,
+    ]);
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+};
