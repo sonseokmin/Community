@@ -2,7 +2,7 @@
 
 const dbConnect = require("../database/index.js");
 
-// 전체 게시글 응답
+// 전체 게시글 조회
 exports.getPosts = async (req, res) => {
   const sql = `
   SELECT *
@@ -17,7 +17,7 @@ exports.getPosts = async (req, res) => {
   }
 };
 
-// 특정 게시글 응답
+// 특정 게시글 조회
 exports.getPost = async (req, res) => {
   const sql = `
   SELECT *
@@ -64,6 +64,20 @@ exports.updatePost = async (req, res) => {
       req.content,
       req.id,
     ]);
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+// 특정 게시글 조회
+exports.deletePost = async (req, res) => {
+  const sql = `
+  DELETE FROM posts
+  WHERE id = ?
+  `;
+  try {
+    const [result] = await dbConnect.query(sql, [req]);
     return result;
   } catch (err) {
     console.log(err);

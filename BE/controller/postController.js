@@ -59,3 +59,18 @@ exports.updatePost = async (req, res) => {
     console.log(err);
   }
 };
+
+// 게시글 삭제
+exports.deletePost = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const response = await postModel.deletePost(id);
+    return res.status(204).json({
+      status: 204,
+      message: "Success",
+      data: response,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
