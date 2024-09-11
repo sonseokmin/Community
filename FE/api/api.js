@@ -58,3 +58,16 @@ export async function updatePost(data) {
     console.log(err);
   }
 }
+
+// 게시글 삭제
+export async function deletePost(id) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/community/delete/${id}`, {
+      method: "DELETE",
+    });
+    const data = response.json();
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+}

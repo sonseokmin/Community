@@ -1,7 +1,7 @@
-/* 게시판 특정 게시글 조회 */
+/* 게시판 특정 게시글 조회/삭제 */
 
-// 특정 게시글 API 요청 기능 로드
-import { getPost } from "../api/api.js";
+// 특정 게시글 조회/삭제 요청 API
+import { getPost, deletePost } from "../api/api.js";
 
 // Qurry String Value 추출 함수
 function getQueryParam(param) {
@@ -13,11 +13,31 @@ function getQueryParam(param) {
 const id = parseInt(getQueryParam("id"));
 const type = getQueryParam("type");
 
-// main으로 돌아가기 함수
+// 돌아가기 버튼
 const backMainButton = document.getElementById("backMainPage");
 
+// main 페이지로 이동
 backMainButton.addEventListener("click", () => {
   window.location.href = `../community/${type.toLowerCase()}.html`; // 메인 페이지로 이동
+});
+
+// 수정하기 버튼
+const goWriteButton = document.getElementById("goWritePage");
+
+// 수정 페이지로 이동
+goWriteButton.addEventListener("click", () => {
+  window.location.href = `../community/write.html?id=${id}&type=${type.toLowerCase()}`;
+});
+
+// 삭제하기 버튼
+const deleteButton = document.getElementById("deleteButton");
+
+// 삭제
+deleteButton.addEventListener("click", async () => {
+  try {
+    const response = await deletePost(id); // 게시글 삭제
+    window.location.href = `../community/${type.toLowerCase()}.html`; // 메인 페이지로 이동
+  } catch (err) {}
 });
 
 // html 파일이 로드됐을 때
@@ -32,12 +52,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     postTitle.innerText = data.title;
     postContent.innerText = data.content;
-
-    const goWriteButton = document.getElementById("goWritePage");
-
-    goWriteButton.addEventListener("click", () => {
-      window.location.href = `../community/write.html?id=${id}&type=${type.toLowerCase()}`; // 수정 페이지로 이동
-    });
   } catch (err) {
     console.log(err);
   }
