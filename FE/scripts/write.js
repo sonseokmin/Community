@@ -41,6 +41,8 @@ write.addEventListener("click", async function () {
 
     await updatePost(data); // 게시글 수정 요청
 
+    alert("수정되었습니다.");
+
     window.location.href = `../community/${type.toLowerCase()}.html`; // 메인 페이지로 이동
   } // WRITE
   else {
@@ -51,6 +53,8 @@ write.addEventListener("click", async function () {
     };
 
     await writePost(data); // 게시글 작성 요청
+
+    alert("작성되었습니다.");
 
     window.location.href = `../community/${type.toLowerCase()}.html`; // 메인 페이지로 이동
   }

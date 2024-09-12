@@ -8,10 +8,13 @@ export async function getPosts(type) {
   // type === board명
   try {
     const response = await fetch(`${API_BASE_URL}/community/${type}`);
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} - ${response.statusText}`);
+    }
     const data = response.json();
     return data;
   } catch (err) {
-    console.log(`Fail to fetch ${type} board posts`);
+    console.error("GET 요청 에러 발생", err.message);
   }
 }
 
@@ -19,10 +22,13 @@ export async function getPosts(type) {
 export async function getPost(id) {
   try {
     const response = await fetch(`${API_BASE_URL}/community/view/${id}`);
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} - ${response.statusText}`);
+    }
     const data = response.json();
     return data;
   } catch (err) {
-    console.log(err);
+    console.error("GET 요청 에러 발생", err.message);
   }
 }
 
@@ -36,8 +42,11 @@ export async function writePost(data) {
       },
       body: JSON.stringify(data),
     });
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} - ${response.statusText}`);
+    }
   } catch (err) {
-    console.log(err);
+    console.error("POST 요청 에러 발생", err.message);
   }
 }
 
@@ -54,20 +63,26 @@ export async function updatePost(data) {
         body: JSON.stringify(data),
       }
     );
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} - ${response.statusText}`);
+    }
   } catch (err) {
-    console.log(err);
+    console.error("PUT 요청 에러 발생", err.message);
   }
 }
 
-// 게시글 삭제
+// 게시글 삭제 API
 export async function deletePost(id) {
   try {
     const response = await fetch(`${API_BASE_URL}/community/delete/${id}`, {
       method: "DELETE",
     });
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} - ${response.statusText}`);
+    }
     const data = response.json();
     return data;
   } catch (err) {
-    console.log(err);
+    console.error("DELETE 요청 에러 발생", err.message);
   }
 }

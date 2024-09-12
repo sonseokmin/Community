@@ -45,7 +45,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       response.data.forEach((data) => {
         const postTitle = document.createElement("a");
         postTitle.innerText = data.title;
-        postTitle.className = "post";
         postTitle.href = `./view.html?id=${data.id}&type=${data.type}`;
 
         const postContent = document.createElement("span");
@@ -59,7 +58,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         postList.appendChild(li);
       });
     } catch (error) {
-      console.error("Error fetching posts:", error);
+      console.error("응답 데이터 처리 중 오류 발생", err.message);
     }
   }
 });

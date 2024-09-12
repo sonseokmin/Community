@@ -35,9 +35,11 @@ const deleteButton = document.getElementById("deleteButton");
 // 삭제
 deleteButton.addEventListener("click", async () => {
   try {
-    const response = await deletePost(id); // 게시글 삭제
+    await deletePost(id); // 게시글 삭제
     window.location.href = `../community/${type.toLowerCase()}.html`; // 메인 페이지로 이동
-  } catch (err) {}
+  } catch (err) {
+    console.error("데이터 삭제 중 오류 발생", err.message);
+  }
 });
 
 // html 파일이 로드됐을 때
@@ -53,6 +55,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     postTitle.innerText = data.title;
     postContent.innerText = data.content;
   } catch (err) {
-    console.log(err);
+    console.error("응답 데이터 처리 중 오류 발생", err.message);
   }
 });
