@@ -68,7 +68,7 @@ exports.getPost = async (req, res) => {
 
 // 게시글 작성
 exports.writePost = async (req, res) => {
-  const { postTitle, postContent, postType } = req.body;
+  const { title: postTitle, content: postContent, type: postType } = req.body;
   try {
     if (!postTitle) {
       const error = new Error(STATUS_MESSAGE.INVALID_POST_TITLE);
@@ -107,7 +107,12 @@ exports.writePost = async (req, res) => {
 
 // 게시글 수정
 exports.updatePost = async (req, res) => {
-  const { postId, postTitle, postContent, postType } = req.body;
+  const {
+    id: postId,
+    title: postTitle,
+    content: postContent,
+    type: postType,
+  } = req.body;
 
   try {
     if (!postId) {

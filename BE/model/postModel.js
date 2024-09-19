@@ -15,7 +15,7 @@ exports.getPosts = async (req, res) => {
   const boardType = req;
 
   const sql = `
-  SELECT *
+  SELECT id, title, content, type
   FROM posts
   WHERE type = ?
   `;
@@ -34,7 +34,7 @@ exports.getPost = async (req, res) => {
   const postId = req;
 
   const sql = `
-  SELECT *
+  SELECT title, content
   FROM posts
   WHERE id = ?
   `;
