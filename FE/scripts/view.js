@@ -35,7 +35,7 @@ const deleteButton = document.getElementById("deleteButton");
 // 삭제
 deleteButton.addEventListener("click", async () => {
   try {
-    await deletePost(id); // 게시글 삭제
+    const response = await deletePost(id); // 게시글 삭제
     window.location.href = `../community/${type.toLowerCase()}.html`; // 메인 페이지로 이동
   } catch (err) {
     console.error("데이터 삭제 중 오류 발생", err.message);

@@ -77,11 +77,7 @@ export async function deletePost(id) {
     const response = await fetch(`${API_BASE_URL}/community/delete/${id}`, {
       method: "DELETE",
     });
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status} - ${response.statusText}`);
-    }
-    const data = response.json();
-    return data;
+    return response;
   } catch (err) {
     console.error("DELETE 요청 에러 발생", err.message);
   }
