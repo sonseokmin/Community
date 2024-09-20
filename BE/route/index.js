@@ -2,9 +2,11 @@
 
 const express = require("express");
 const postRoute = require("./postRoute.js");
+const userRoute = require("./userRoute.js");
 
 const router = express.Router();
 
 router.use(postRoute); // 게시물 API 응답
+router.use(userRoute); // 유저 API 응답
 
 module.exports = router;

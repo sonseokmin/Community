@@ -11,7 +11,7 @@ const dbConnect = require("../database/index.js");
  */
 
 // 게시판 전체 조회
-exports.getPosts = async (req, res) => {
+exports.getPosts = async (req) => {
   const boardType = req;
 
   const sql = `
@@ -30,7 +30,7 @@ exports.getPosts = async (req, res) => {
 };
 
 // 게시글 조회
-exports.getPost = async (req, res) => {
+exports.getPost = async (req) => {
   const postId = req;
 
   const sql = `
@@ -49,7 +49,7 @@ exports.getPost = async (req, res) => {
 };
 
 // 게시글 작성
-exports.writePost = async (req, res) => {
+exports.writePost = async (req) => {
   const requestData = [req.title, req.content, req.type];
 
   const sql = `
@@ -68,7 +68,7 @@ exports.writePost = async (req, res) => {
 };
 
 // 게시글 수정
-exports.updatePost = async (req, res) => {
+exports.updatePost = async (req) => {
   const requestData = [req.title, req.content, req.id];
 
   const sql = `
@@ -87,7 +87,7 @@ exports.updatePost = async (req, res) => {
 };
 
 // 게시글 삭제
-exports.deletePost = async (req, res) => {
+exports.deletePost = async (req) => {
   const postId = req;
   const sql = `
   DELETE FROM posts
