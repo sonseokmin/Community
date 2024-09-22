@@ -1,7 +1,7 @@
 /* 게시판 특정 게시글 조회/삭제 */
 
 // 특정 게시글 조회/삭제 요청 API
-import { getPost, deletePost } from "../api/api.js";
+import { getPost, deletePost } from "../api/postApi.js";
 
 // Qurry String Value 추출 함수
 function getQueryParam(param) {
@@ -50,11 +50,13 @@ document.addEventListener("DOMContentLoaded", async function () {
   try {
     const response = await getPost(id); // 게시글 조회
 
+    console.log(response);
+
     const data = response.data[0];
 
     postTitle.innerText = data.title;
     postContent.innerText = data.content;
   } catch (err) {
-    console.error("응답 데이터 처리 중 오류 발생", err.message);
+    console.error("요청 중 오류 발생", err.message);
   }
 });

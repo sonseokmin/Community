@@ -1,4 +1,4 @@
-/* API 요청 파일 */
+/* 게시글 API 요청 파일 */
 
 // 기본 URL
 const API_BASE_URL = "http://127.0.0.1:3000";
@@ -11,8 +11,7 @@ export async function getPosts(type) {
     if (!response.ok) {
       throw new Error(`Error: ${response.status} - ${response.statusText}`);
     }
-    const data = response.json();
-    return data;
+    return response.json();
   } catch (err) {
     console.error("GET 요청 에러 발생", err.message);
   }
@@ -25,8 +24,7 @@ export async function getPost(id) {
     if (!response.ok) {
       throw new Error(`Error: ${response.status} - ${response.statusText}`);
     }
-    const data = response.json();
-    return data;
+    return response.json();
   } catch (err) {
     console.error("GET 요청 에러 발생", err.message);
   }
@@ -42,9 +40,7 @@ export async function writePost(data) {
       },
       body: JSON.stringify(data),
     });
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status} - ${response.statusText}`);
-    }
+    return response.json();
   } catch (err) {
     console.error("POST 요청 에러 발생", err.message);
   }
@@ -63,9 +59,7 @@ export async function updatePost(data) {
         body: JSON.stringify(data),
       }
     );
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status} - ${response.statusText}`);
-    }
+    return response.json();
   } catch (err) {
     console.error("PUT 요청 에러 발생", err.message);
   }
@@ -77,7 +71,7 @@ export async function deletePost(id) {
     const response = await fetch(`${API_BASE_URL}/community/delete/${id}`, {
       method: "DELETE",
     });
-    return response;
+    return response.json();
   } catch (err) {
     console.error("DELETE 요청 에러 발생", err.message);
   }

@@ -1,7 +1,7 @@
 /* 게시판 게시글 작성 & 수정 */
 
 // 게시판 게시글 작성하기 API 요청 함수
-import { getPost, writePost, updatePost } from "../api/api.js";
+import { getPost, writePost, updatePost } from "../api/postApi.js";
 
 // 작성하기 버튼
 const write = document.getElementById("write");

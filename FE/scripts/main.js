@@ -1,7 +1,10 @@
 /* 게시판 공통 기능 정의 파일 */
 
 // 모든 게시판 게시글 API 요청 함수
-import { getPosts } from "../api/api.js";
+import { getPosts } from "../api/postApi.js";
+
+// 로그인 상태 확인 API 요청 함수
+import { checkLoginState } from "../api/userApi.js";
 
 // 현재 URL을 '/'로 분할하여 배열로 변환합니다.
 const urlArray = document.URL.split("/");
@@ -32,6 +35,23 @@ writeButton.addEventListener("click", () => {
 
 // html 파일이 로드됐을 때
 document.addEventListener("DOMContentLoaded", async function () {
+  const checkLogin = await checkLoginState();
+
+  // 로그인 상태일 때
+  if (checkLogin.loggedIn === true) {
+    const userName = checkLogin.username; // 쿠키에서 유저 이름 얻음
+
+    const loginButton = document.getElementById("login"); // 로그인 버튼 요소
+
+    const userInfo = document.createElement("a"); // 유저 이름을 나타낼 요소 생성
+
+    userInfo.id = "user-info";
+    userInfo.innerText = `${userName} 님`; // 요소에 유저 이름 할당
+
+    document.getElementById("auth-buttons").appendChild(userInfo); // 원래 자식 요소에 추가
+
+    loginButton.parentNode.removeChild(loginButton); // 로그인 버튼 삭제
+  }
   // board가 존재할 경우
   if (type) {
     try {
@@ -57,7 +77,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         postList.appendChild(li);
       });
-    } catch (error) {
+    } catch (err) {
       console.error("응답 데이터 처리 중 오류 발생", err.message);
     }
   }
