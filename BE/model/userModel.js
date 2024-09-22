@@ -8,10 +8,14 @@ const dbConnect = require("../database/index.js");
  */
 
 // 로그인
-exports.login = async (req) => {
-  const requestData = [req.userId, req.userPw];
+exports.userLogin = async (req) => {
+  const requestData = [req.userEmail, req.userPw];
 
-  const sql = "";
+  const sql = `
+  SELECT *
+  FROM users
+  WHERE email = ? AND password = ?
+  `;
 
   const [result] = await dbConnect.query(sql, requestData);
 
@@ -23,7 +27,7 @@ exports.login = async (req) => {
 };
 
 // 회원가입
-exports.signup = async (req) => {
+exports.userSignup = async (req) => {
   const requestData = [req.userId, req.userPw, req.userName];
 
   const sql = "";
