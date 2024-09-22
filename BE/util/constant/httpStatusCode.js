@@ -55,6 +55,8 @@ const STATUS_MESSAGE = {
   INVALID_POST_TYPE: "invalid_post_type",
 
   NOT_A_SINGLE_POST: "not_a_single_post",
+  NOT_FOUND_TYPE: "not_found_type",
+  NOT_FOUND_POST: "not_found_post",
 
   GET_POSTS_SUCCESS: "get_posts_success",
   WRITE_POST_SUCCESS: "write_post_success",
