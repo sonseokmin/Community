@@ -45,6 +45,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const userInfo = document.createElement("a"); // 유저 이름을 나타낼 요소 생성
 
+    userInfo.href = "info.html";
     userInfo.id = "user-info";
     userInfo.innerText = `${userName} 님`; // 요소에 유저 이름 할당
 
