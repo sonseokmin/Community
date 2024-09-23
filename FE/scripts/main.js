@@ -94,10 +94,14 @@ document.addEventListener("DOMContentLoaded", async function () {
         const postContent = document.createElement("span");
         postContent.innerText = data.content;
 
+        const postUser = document.createElement("span");
+        postUser.innerText = data.username;
+
         const li = document.createElement("li");
 
         li.appendChild(postTitle);
         li.appendChild(postContent);
+        li.appendChild(postUser);
 
         postList.appendChild(li);
       });
