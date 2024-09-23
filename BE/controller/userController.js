@@ -9,6 +9,7 @@ const {
 /**
  * 로그인
  * 로그인 상태 확인
+ * 로그아웃
  * 회원가입
  */
 
@@ -68,7 +69,7 @@ exports.checkLoginState = async (req, res) => {
   if (req.session.userId) {
     const response = await userModel.getUser(req.session.userId);
 
-    return res.status(200).json({
+    return res.status(STATUS_CODE.OK).json({
       loggedIn: true,
       data: {
         id: response[0].id,
@@ -78,10 +79,29 @@ exports.checkLoginState = async (req, res) => {
     });
     //쿠키 존재하지 않을 경우
   } else {
-    return res.status(200).json({
+    return res.status(STATUS_CODE.OK).json({
       loggedIn: false,
     });
   }
+};
+
+// 로그아웃
+exports.userLogout = async (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).json({
+        status: STATUS_CODE.INTERNAL_SERVER_ERROR,
+        message: STATUS_MESSAGE.INTERNAL_SERVER_ERROR,
+      });
+    }
+
+    res.clearCookie("connect.sid");
+
+    return res.status(STATUS_CODE.OK).json({
+      status: STATUS_CODE.OK,
+      message: STATUS_MESSAGE.LOGOUT_SUCCESS,
+    });
+  });
 };
 
 // 회원가입
@@ -89,6 +109,6 @@ exports.userSignup = async (req, res) => {
   const { userEmail, userPw, userName } = req.body;
   try {
   } catch (err) {
-    next(err);
+    console.log(err);
   }
 };

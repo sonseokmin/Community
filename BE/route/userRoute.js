@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.post("/community/users/login", userController.userLogin); // 로그인
 router.get("/community/check/login", userController.checkLoginState); // 로그인 상태 확인
+router.post("/community/users/logout", userController.userLogout); // 로그아웃
 router.post("/community/users/signup", userController.userSignup); // 회원가입
 
 module.exports = router;

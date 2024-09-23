@@ -5,6 +5,7 @@ const dbConnect = require("../database/index.js");
 /**
  * 로그인
  * 유저 정보
+ * 로그아웃
  * 회원가입
  */
 
