@@ -15,9 +15,9 @@ exports.getPosts = async (req) => {
   const boardType = req;
 
   const sql = `
-  SELECT id, title, content, type
-  FROM posts
-  WHERE type = ?
+  SELECT posts.id, posts.title, posts.content, posts.type, users.username
+  FROM users
+  INNER JOIN posts ON users.id = posts.user_id AND type = ?;
   `;
 
   const [result] = await dbConnect.query(sql, [boardType.toUpperCase()]);
