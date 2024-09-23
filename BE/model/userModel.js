@@ -4,6 +4,7 @@ const dbConnect = require("../database/index.js");
 
 /**
  * 로그인
+ * 유저 정보
  * 회원가입
  */
 
@@ -12,9 +13,28 @@ exports.userLogin = async (req) => {
   const requestData = [req.userEmail, req.userPw];
 
   const sql = `
-  SELECT *
+  SELECT id
   FROM users
   WHERE email = ? AND password = ?
+  `;
+
+  const [result] = await dbConnect.query(sql, requestData);
+
+  if (!result) {
+    return null;
+  }
+
+  return result;
+};
+
+// 유저 정보
+exports.getUser = async (req) => {
+  const requestData = [req];
+
+  const sql = `
+  SELECT *
+  FROM users
+  WHERE id = ?
   `;
 
   const [result] = await dbConnect.query(sql, requestData);

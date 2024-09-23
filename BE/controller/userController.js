@@ -43,11 +43,8 @@ exports.userLogin = async (req, res) => {
       });
     }
 
-    res.cookie("username", response[0].username, {
-      httpOnly: true,
-      sameSite: "None",
-      secure: true,
-    });
+    req.session.userId = response[0].id;
+    console.log(req.session.userId);
 
     return res.status(STATUS_CODE.OK).json({
       status: STATUS_CODE.OK,
@@ -68,10 +65,16 @@ exports.userLogin = async (req, res) => {
 // 로그인 상태 확인
 exports.checkLoginState = async (req, res) => {
   // 쿠키 존재할 경우
-  if (req.cookies.username) {
+  if (req.session.userId) {
+    const response = await userModel.getUser(req.session.userId);
+
     return res.status(200).json({
       loggedIn: true,
-      username: req.cookies.username,
+      data: {
+        id: response[0].id,
+        userName: response[0].username,
+        email: response[0].email,
+      },
     });
     //쿠키 존재하지 않을 경우
   } else {
