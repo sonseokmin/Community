@@ -37,22 +37,40 @@ writeButton.addEventListener("click", () => {
 document.addEventListener("DOMContentLoaded", async function () {
   const checkLogin = await checkLoginState();
 
-  // 로그인 상태일 때
   if (checkLogin.loggedIn === true) {
     const userName = checkLogin.data.userName; // 쿠키에서 유저 이름 얻음
 
     const loginButton = document.getElementById("login"); // 로그인 버튼 요소
 
-    const userInfo = document.createElement("a"); // 유저 이름을 나타낼 요소 생성
+    // 유저 정보와 로그아웃 버튼을 담을 div 생성
+    const userInfoContainer = document.createElement("div");
+    userInfoContainer.className = "user-info-container"; // 클래스 추가
 
+    const userInfo = document.createElement("a"); // 유저 이름을 나타낼 요소 생성
     userInfo.href = "info.html";
-    userInfo.id = "user-info";
+    userInfo.className = "user-name"; // 클래스 추가
     userInfo.innerText = `${userName} 님`; // 요소에 유저 이름 할당
 
-    document.getElementById("auth-buttons").appendChild(userInfo); // 원래 자식 요소에 추가
+    // 로그아웃 버튼 생성
+    const logoutButton = document.createElement("button");
+    logoutButton.innerText = "로그아웃";
+    logoutButton.className = "logout-button"; // 클래스 추가
 
+    // 로그아웃 버튼 클릭 시 동작
+    logoutButton.addEventListener("click", function () {
+      // 로그아웃 처리 로직 (예: 쿠키 삭제, 서버 요청 등)
+      alert("로그아웃되었습니다.");
+      // 여기에 추가적인 로그아웃 처리 코드 작성
+    });
+
+    // 유저 정보와 로그아웃 버튼을 컨테이너에 추가
+    userInfoContainer.appendChild(userInfo); // 유저 이름 추가
+    userInfoContainer.appendChild(logoutButton); // 로그아웃 버튼 추가
+
+    document.getElementById("auth-buttons").appendChild(userInfoContainer); // 컨테이너를 auth-buttons에 추가
     loginButton.parentNode.removeChild(loginButton); // 로그인 버튼 삭제
   }
+
   // board가 존재할 경우
   if (type) {
     try {
