@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   // 로그인 상태일 때
   if (checkLogin.loggedIn === true) {
-    const userName = checkLogin.username; // 쿠키에서 유저 이름 얻음
+    const userName = checkLogin.data.userName; // 쿠키에서 유저 이름 얻음
 
     const loginButton = document.getElementById("login"); // 로그인 버튼 요소
 

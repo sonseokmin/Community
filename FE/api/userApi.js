@@ -12,7 +12,7 @@ export async function userLogin(data) {
         "Content-Type": "application/json", // JSON 형식의 데이터임을 명시
       },
       body: JSON.stringify(data),
-      credentials: "include", // 쿠키 포함 요청
+      credentials: "include", // 쿠키를 포함하여 요청
     });
     return response.json();
   } catch (err) {
@@ -25,7 +25,7 @@ export async function checkLoginState() {
   try {
     const response = await fetch(`${API_BASE_URL}/community/check/login`, {
       method: "GET",
-      credentials: "include", // 쿠키를 포함 요청
+      credentials: "include", // 쿠키를 포함하여 요청
     });
     return response.json();
   } catch (err) {
