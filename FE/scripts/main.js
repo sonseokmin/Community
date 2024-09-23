@@ -4,7 +4,7 @@
 import { getPosts } from "../api/postApi.js";
 
 // 로그인 상태 확인 API 요청 함수
-import { checkLoginState } from "../api/userApi.js";
+import { checkLoginState, userLogout } from "../api/userApi.js";
 
 // 현재 URL을 '/'로 분할하여 배열로 변환합니다.
 const urlArray = document.URL.split("/");
@@ -57,10 +57,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     logoutButton.className = "logout-button"; // 클래스 추가
 
     // 로그아웃 버튼 클릭 시 동작
-    logoutButton.addEventListener("click", function () {
-      // 로그아웃 처리 로직 (예: 쿠키 삭제, 서버 요청 등)
-      alert("로그아웃되었습니다.");
-      // 여기에 추가적인 로그아웃 처리 코드 작성
+    logoutButton.addEventListener("click", async function () {
+      const response = await userLogout();
+
+      if (response.status === 200) {
+        alert("로그아웃되었습니다.");
+        location.reload();
+      } else {
+        alert("로그아웃 실패.");
+      }
     });
 
     // 유저 정보와 로그아웃 버튼을 컨테이너에 추가
