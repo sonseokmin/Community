@@ -58,6 +58,9 @@ const STATUS_MESSAGE = {
   NOT_FOUND_TYPE: "not_found_type",
   NOT_FOUND_POST: "not_found_post",
 
+  IS_USER_POST: "is_user_post",
+  IS_NOT_USER_POST: "is_not_user_post",
+
   GET_POSTS_SUCCESS: "get_posts_success",
   WRITE_POST_SUCCESS: "write_post_success",
   UPDATE_POST_SUCCESS: "update_post_success",

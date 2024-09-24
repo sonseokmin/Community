@@ -9,6 +9,7 @@ const {
 /**
  * 로그인
  * 로그인 상태 확인
+ * 유저 게시글 확인
  * 로그아웃
  * 회원가입
  */
@@ -53,12 +54,55 @@ exports.userLogin = async (req, res) => {
       data: null,
     });
   } catch (err) {
-    console.log(err);
+    console.error(err);
 
     return res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).json({
       status: STATUS_CODE.INTERNAL_SERVER_ERROR,
       message: STATUS_MESSAGE.INTERNAL_SERVER_ERROR,
       data: null,
+    });
+  }
+};
+
+// 유저 게시글 확인
+exports.checkUserPost = async (req, res) => {
+  const postId = req.params.postId;
+
+  if (!postId) {
+    return res.status(STATUS_CODE.BAD_REQUEST).json({
+      status: STATUS_CODE.BAD_REQUEST,
+      message: STATUS_MESSAGE.INVALID_POST_ID,
+      userPost: false,
+    });
+  }
+
+  if (req.session.userId) {
+    data = {
+      postId: postId,
+      userId: req.session.userId,
+    };
+    try {
+      const response = await userModel.checkUserPost(data);
+
+      if (response[0].is_equal === 1) {
+        return res.status(STATUS_CODE.OK).json({
+          status: STATUS_CODE.OK,
+          message: STATUS_MESSAGE.IS_USER_POST,
+          userPost: true,
+        });
+      } else {
+        return res.status(STATUS_CODE.OK).json({
+          status: STATUS_CODE.OK,
+          message: STATUS_MESSAGE.IS_NOT_USER_POST,
+          userPost: false,
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  } else {
+    return res.status(STATUS_CODE.OK).json({
+      loggedIn: false,
     });
   }
 };

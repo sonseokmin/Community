@@ -5,7 +5,7 @@ const dbConnect = require("../database/index.js");
 /**
  * 로그인
  * 유저 정보
- * 로그아웃
+ * 유저 게시글 확인
  * 회원가입
  */
 
@@ -38,6 +38,29 @@ exports.getUser = async (req) => {
   WHERE id = ?
   `;
 
+  const [result] = await dbConnect.query(sql, requestData);
+
+  if (!result) {
+    return null;
+  }
+
+  return result;
+};
+
+// 유저 게시글 확인
+exports.checkUserPost = async (req) => {
+  const requestData = [req.userId, req.postId];
+  console.log(requestData);
+  const sql = `
+    SELECT 
+    CASE 
+        WHEN user_id = ? THEN TRUE
+        ELSE FALSE
+    END AS is_equal
+    FROM posts
+    WHERE id = ?;
+
+  `;
   const [result] = await dbConnect.query(sql, requestData);
 
   if (!result) {
