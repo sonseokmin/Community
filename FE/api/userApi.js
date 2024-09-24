@@ -4,6 +4,7 @@
  * 로그인
  * 로그인 상태 확인
  * 로그아웃
+ * 유저 게시글 확인
  * 회원가입
  */
 
@@ -50,6 +51,22 @@ export async function userLogout() {
     return response.json();
   } catch (err) {
     console.error("로그아웃 요청 에러 발생", err.message);
+  }
+}
+
+// 유저 게시글 확인
+export async function checkUserPost(postId) {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/community/check/userPost/${postId}`,
+      {
+        method: "GET",
+        credentials: "include",
+      }
+    );
+    return response.json();
+  } catch (err) {
+    console.error("유저 게시글 확인 도중 에러 발생", err.message);
   }
 }
 

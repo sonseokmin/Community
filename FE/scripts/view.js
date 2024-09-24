@@ -3,6 +3,9 @@
 // 특정 게시글 조회/삭제 요청 API
 import { getPost, deletePost } from "../api/postApi.js";
 
+// 유저 게시글 확인 요청 API
+import { checkUserPost } from "../api/userApi.js";
+
 // Qurry String Value 추출 함수
 function getQueryParam(param) {
   const urlParams = new URLSearchParams(window.location.search);
@@ -10,7 +13,7 @@ function getQueryParam(param) {
 }
 
 // Querry String id 값 할당
-const id = parseInt(getQueryParam("id"));
+const postId = parseInt(getQueryParam("id"));
 const type = getQueryParam("type");
 
 // 돌아가기 버튼
@@ -26,7 +29,7 @@ const goWriteButton = document.getElementById("goWritePage");
 
 // 수정 페이지로 이동
 goWriteButton.addEventListener("click", () => {
-  window.location.href = `../community/write.html?id=${id}&type=${type.toLowerCase()}`;
+  window.location.href = `../community/write.html?id=${postId}&type=${type.toLowerCase()}`;
 });
 
 // 삭제하기 버튼
@@ -44,13 +47,19 @@ deleteButton.addEventListener("click", async () => {
 
 // html 파일이 로드됐을 때
 document.addEventListener("DOMContentLoaded", async function () {
+  const response = await checkUserPost(postId);
+
+  console.log(response);
+
+  if (response.userPost === false || response.loggedIn === false) {
+    goWriteButton.remove();
+    deleteButton.remove();
+  }
   const postTitle = document.getElementById("title"); // 제목
   const postContent = document.getElementById("content"); // 내용
 
   try {
-    const response = await getPost(id); // 게시글 조회
-
-    console.log(response);
+    const response = await getPost(postId); // 게시글 조회
 
     const data = response.data[0];
 
