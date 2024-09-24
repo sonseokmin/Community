@@ -47,7 +47,9 @@ export async function writePost(data) {
         "Content-Type": "application/json", // JSON 형식의 데이터임을 명시
       },
       body: JSON.stringify(data),
+      credentials: "include", // 쿠키를 포함하여 요청
     });
+
     return response.json();
   } catch (err) {
     console.error("POST 요청 에러 발생", err.message);
@@ -65,9 +67,10 @@ export async function updatePost(data) {
           "Content-Type": "application/json", // JSON 형식의 데이터임을 명시
         },
         body: JSON.stringify(data),
+        credentials: "include", // 쿠키를 포함하여 요청
       }
     );
-    return response.json();
+    return response;
   } catch (err) {
     console.error("PUT 요청 에러 발생", err.message);
   }
