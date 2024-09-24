@@ -50,12 +50,12 @@ exports.getPost = async (req) => {
 
 // 게시글 작성
 exports.writePost = async (req) => {
-  const requestData = [req.title, req.content, req.type];
+  const requestData = [req.title, req.content, req.type, req.userId];
 
   const sql = `
   INSERT
-  INTO posts (title, content, type)
-  VALUES (?, ?, ?)
+  INTO posts (title, content, type, user_id)
+  VALUES (?, ?, ?, ?)
   `;
 
   const [result] = await dbConnect.query(sql, requestData);
@@ -69,12 +69,12 @@ exports.writePost = async (req) => {
 
 // 게시글 수정
 exports.updatePost = async (req) => {
-  const requestData = [req.title, req.content, req.id];
+  const requestData = [req.title, req.content, req.id, req.userId];
 
   const sql = `
   UPDATE posts
   SET title = ? , content = ?
-  WHERE id = ?;
+  WHERE id = ? AND user_id = ?;
   `;
 
   const [result] = await dbConnect.query(sql, requestData);

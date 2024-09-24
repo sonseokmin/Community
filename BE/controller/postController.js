@@ -100,7 +100,14 @@ exports.getPost = async (req, res) => {
 // 게시글 작성
 exports.writePost = async (req, res) => {
   const { title: postTitle, content: postContent, type: postType } = req.body; // 제목, 내용, 게시판 종류
-
+  // 로그인이 안 됐을 경우
+  if (!req.session.userId) {
+    return res.status(STATUS_CODE.UNAUTHORIZED).json({
+      status: STATUS_CODE.UNAUTHORIZED,
+      message: STATUS_MESSAGE.NOT_FOUND_USER,
+      data: null,
+    });
+  }
   // 제목 누락
   if (!postTitle) {
     return res.status(STATUS_CODE.BAD_REQUEST).json({
@@ -128,8 +135,15 @@ exports.writePost = async (req, res) => {
     });
   }
 
+  requestData = {
+    title: postTitle,
+    content: postContent,
+    type: postType,
+    userId: req.session.userId,
+  };
+
   try {
-    const response = await postModel.writePost(req.body);
+    const response = await postModel.writePost(requestData);
 
     // 찾을 수 없는 게시판
     if (response.length === 0) {
@@ -164,6 +178,15 @@ exports.updatePost = async (req, res) => {
     content: postContent,
     type: postType,
   } = req.body; // 게시글 아이디, 제목, 내용, 게시판 종류
+
+  // 로그인이 안 됐을 경우
+  if (!req.session.userId) {
+    return res.status(STATUS_CODE.UNAUTHORIZED).json({
+      status: STATUS_CODE.UNAUTHORIZED,
+      message: STATUS_MESSAGE.NOT_FOUND_USER,
+      data: null,
+    });
+  }
 
   // 게시글 아이디 누락
   if (!postId) {
@@ -201,8 +224,15 @@ exports.updatePost = async (req, res) => {
     });
   }
 
+  const requestData = {
+    id: postId,
+    title: postTitle,
+    content: postContent,
+    userId: req.session.userId,
+  };
+
   try {
-    const response = await postModel.updatePost(req.body);
+    const response = await postModel.updatePost(requestData);
 
     // 찾을 수 없는 게시판
     if (response.length === 0) {
