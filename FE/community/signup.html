@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>회원가입</title>
+    <link rel="stylesheet" href="../styles/signup.css" />
+    <script type="module" src="../scripts/signup.js"></script>
+  </head>
+  <body>
+    <div class="signup-container">
+      <form id="signupForm">
+        <h2>회원가입</h2>
+
+        <!-- 이름 입력 -->
+        <div class="form-group">
+          <label for="name">이름</label>
+          <input
+            type="text"
+            id="name"
+            placeholder="이름을 입력하세요"
+            required
+            value="손석민"
+          />
+        </div>
+
+        <!-- 닉네임 입력 및 중복 확인 -->
+        <div class="form-group">
+          <label for="nickname">닉네임</label>
+          <input
+            type="text"
+            id="nickname"
+            placeholder="닉네임을 입력하세요"
+            required
+            value="ssm12345"
+          />
+          <button type="button" id="checkNicknameBtn">닉네임 중복 체크</button>
+          <div
+            id="nickname-message"
+            class="error-message"
+            style="display: none"
+          >
+            이미 사용 중인 닉네임입니다.
+          </div>
+        </div>
+
+        <!-- 이메일 입력 및 중복 확인 -->
+        <div class="form-group">
+          <label for="email">이메일</label>
+          <input
+            type="email"
+            id="email"
+            placeholder="이메일을 입력하세요"
+            required
+            value="thsdidrl@gmail.com"
+          />
+          <button type="button" id="checkEmailBtn">이메일 중복 체크</button>
+          <div id="email-message" class="error-message" style="display: none">
+            이미 사용 중인 이메일입니다.
+          </div>
+        </div>
+
+        <!-- 비밀번호 입력 -->
+        <div class="form-group">
+          <label for="password">비밀번호</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="비밀번호를 입력하세요"
+            required
+            value="thstjrals1"
+          />
+        </div>
+
+        <!-- 휴대폰 번호 입력 -->
+        <div class="form-group">
+          <label for="phone">휴대폰 번호</label>
+          <input
+            type="tel"
+            id="phone"
+            placeholder="휴대폰 번호를 입력하세요"
+            required
+            value="01059123919"
+          />
+        </div>
+
+        <!-- 주소 입력 -->
+        <div class="form-group">
+          <label for="address">주소</label>
+          <input
+            type="text"
+            id="address"
+            placeholder="주소를 입력하세요"
+            required
+            value="전북 익산"
+          />
+        </div>
+
+        <!-- 회원가입 버튼 -->
+        <button type="submit" id="signupBtn">회원가입</button>
+
+        <!-- 메인으로 돌아가기 버튼 -->
+        <button
+          type="button"
+          class="back-btn"
+          onclick="window.location.href = 'free.html'"
+        >
+          메인으로 돌아가기
+        </button>
+      </form>
+    </div>
+  </body>
+</html>

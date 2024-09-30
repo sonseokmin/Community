@@ -1,0 +1,94 @@
+/* 전체 컨테이너 스타일 */
+.signup-container {
+  width: 400px;
+  margin: 100px auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  font-family: "Arial", sans-serif;
+}
+
+/* 폼 타이틀 */
+.signup-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+/* 폼 그룹 */
+.form-group {
+  margin-bottom: 15px;
+  position: relative;
+}
+
+/* 라벨 */
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+/* 인풋 스타일 */
+.form-group input {
+  width: calc(100% - 10px);
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* 중복 체크 버튼 */
+#checkEmailBtn,
+#checkNicknameBtn {
+  margin-top: 10px;
+  width: 100%;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#checkEmailBtn:hover {
+  background-color: #0056b3;
+}
+
+/* 에러 메시지 */
+.email-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+/* 회원가입 버튼 스타일 */
+#signupBtn {
+  width: 100%;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#signupBtn:hover {
+  background-color: #218838;
+}
+
+/* 메인으로 돌아가기 버튼 */
+.back-btn {
+  width: 100%;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.back-btn:hover {
+  background-color: #c82333;
+}
