@@ -20,6 +20,10 @@ const STATUS_MESSAGE = {
   /*================= User =================*/
   REQUIRED_EMAIL: "required_email",
   REQUIRED_PASSWORD: "required_password",
+  REQUIRED_NAME: "required_nmae",
+  REQUIRED_NICKNAME: "required_nickname",
+  REQUIRED_PHONE: "required_phone",
+  REQUIRED_ADDRESS: "required_address",
   REQUIRED_AUTHORIZATION: "required_authorization",
 
   REQUEST_TIMEOUT: "request_timeout",
@@ -31,6 +35,8 @@ const STATUS_MESSAGE = {
   INVALID_USER_ID: "invalid_user_id",
 
   ALREADY_EXIST_EMAIL: "already_exist_email",
+  ALREADY_EXIST_NICKNAME: "already_exist_nickname",
+
   NOT_FOUND_USER: "not_found_user",
 
   AVAILVABLE_EMAIL: "available_email",

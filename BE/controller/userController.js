@@ -5,12 +5,19 @@ const {
   STATUS_CODE,
   STATUS_MESSAGE,
 } = require("../util/constant/httpStatusCode.js");
+const {
+  validEmail,
+  validNickname,
+  validPassword,
+} = require("../util/validUtil.js");
 
 /**
  * 로그인
  * 로그인 상태 확인
  * 유저 게시글 확인
  * 로그아웃
+ * 이메일 중복 체크
+ * 닉네임 중복 체크
  * 회원가입
  */
 
@@ -84,6 +91,14 @@ exports.checkUserPost = async (req, res) => {
     try {
       const response = await userModel.checkUserPost(data);
 
+      if (response.length === 0) {
+        return res.status(STATUS_CODE.NOT_FOUND).json({
+          status: STATUS_CODE.NOT_FOUND,
+          message: STATUS_MESSAGE.NOT_FOUND_POST,
+          data: null,
+        });
+      }
+
       if (response[0].is_equal === 1) {
         return res.status(STATUS_CODE.OK).json({
           status: STATUS_CODE.OK,
@@ -99,6 +114,11 @@ exports.checkUserPost = async (req, res) => {
       }
     } catch (err) {
       console.error(err);
+      return res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).json({
+        status: STATUS_CODE.INTERNAL_SERVER_ERROR,
+        message: STATUS_MESSAGE.INTERNAL_SERVER_ERROR,
+        data: null,
+      });
     }
   } else {
     return res.status(STATUS_CODE.OK).json({
@@ -109,22 +129,40 @@ exports.checkUserPost = async (req, res) => {
 
 // 로그인 상태 확인
 exports.checkLoginState = async (req, res) => {
-  // 쿠키 존재할 경우
-  if (req.session.userId) {
-    const response = await userModel.getUser(req.session.userId);
+  try {
+    // 쿠키 존재할 경우
+    if (req.session.userId) {
+      const response = await userModel.getUser(req.session.userId);
 
-    return res.status(STATUS_CODE.OK).json({
-      loggedIn: true,
-      data: {
-        id: response[0].id,
-        userName: response[0].username,
-        email: response[0].email,
-      },
-    });
-    //쿠키 존재하지 않을 경우
-  } else {
-    return res.status(STATUS_CODE.OK).json({
-      loggedIn: false,
+      if (response.length === 0) {
+        return res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).json({
+          status: STATUS_CODE.INTERNAL_SERVER_ERROR,
+          message: STATUS_MESSAGE.INTERNAL_SERVER_ERROR,
+          data: null,
+        });
+      }
+
+      return res.status(STATUS_CODE.OK).json({
+        loggedIn: true,
+        data: {
+          id: response[0].id,
+          userName: response[0].username,
+          email: response[0].email,
+        },
+      });
+      //쿠키 존재하지 않을 경우
+    } else {
+      return res.status(STATUS_CODE.OK).json({
+        loggedIn: false,
+      });
+    }
+  } catch (err) {
+    console.error(err);
+
+    return res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).json({
+      status: STATUS_CODE.INTERNAL_SERVER_ERROR,
+      message: STATUS_MESSAGE.INTERNAL_SERVER_ERROR,
+      data: null,
     });
   }
 };
@@ -148,11 +186,197 @@ exports.userLogout = async (req, res) => {
   });
 };
 
+// 이메일 중복 체크
+exports.checkSignupEmail = async (req, res) => {
+  const { email: email } = req.body;
+
+  if (!email) {
+    return res.status(STATUS_CODE.BAD_REQUEST).json({
+      status: STATUS_CODE.BAD_REQUEST,
+      message: STATUS_MESSAGE.INVALID_EMAIL,
+      data: null,
+    });
+  }
+  try {
+    const response = await userModel.checkSignupEmail(email);
+
+    if (response[0].email_exists === 1) {
+      return res.status(STATUS_CODE.OK).json({
+        status: STATUS_CODE.OK,
+        message: STATUS_MESSAGE.ALREADY_EXIST_EMAIL,
+        exists: true,
+      });
+    } else {
+      return res.status(STATUS_CODE.OK).json({
+        status: STATUS_CODE.OK,
+        message: STATUS_MESSAGE.AVAILVABLE_EMAIL,
+        exists: false,
+      });
+    }
+  } catch (err) {
+    console.error(err);
+
+    return res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).json({
+      status: STATUS_CODE.INTERNAL_SERVER_ERROR,
+      message: STATUS_MESSAGE.INTERNAL_SERVER_ERROR,
+      data: null,
+    });
+  }
+};
+
+// 닉네임 중복 체크
+exports.checkSignupNickname = async (req, res) => {
+  const { nickname: nickname } = req.body;
+
+  if (!nickname) {
+    return res.status(STATUS_CODE.BAD_REQUEST).json({
+      status: STATUS_CODE.BAD_REQUEST,
+      message: STATUS_MESSAGE.INVALID_EMAIL,
+      data: null,
+    });
+  }
+
+  try {
+    const response = await userModel.checkSignupNickname(nickname);
+
+    if (response[0].nickname_exists === 1) {
+      return res.status(STATUS_CODE.OK).json({
+        status: STATUS_CODE.OK,
+        message: STATUS_MESSAGE.ALREADY_EXIST_NICKNAME,
+        exists: true,
+      });
+    } else {
+      return res.status(STATUS_CODE.OK).json({
+        status: STATUS_CODE.OK,
+        message: STATUS_MESSAGE.AVAILABLE_NICKNAME,
+        exists: false,
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).json({
+      status: STATUS_CODE.INTERNAL_SERVER_ERROR,
+      message: STATUS_MESSAGE.INTERNAL_SERVER_ERROR,
+      data: null,
+    });
+  }
+};
+
 // 회원가입
 exports.userSignup = async (req, res) => {
-  const { userEmail, userPw, userName } = req.body;
+  const {
+    name: userName,
+    nickname: userNickname,
+    email: userEmail,
+    password: userPw,
+    phone: userPhone,
+    address: userAddress,
+  } = req.body;
+
+  if (!userName) {
+    return res.status(STATUS_CODE.BAD_REQUEST).json({
+      status: STATUS_CODE.BAD_REQUEST,
+      message: STATUS_MESSAGE.REQUIRED_NAME,
+      data: null,
+    });
+  }
+
+  if (!userNickname) {
+    return res.status(STATUS_CODE.BAD_REQUEST).json({
+      status: STATUS_CODE.BAD_REQUEST,
+      message: STATUS_MESSAGE.REQUIRED_NICKNAME,
+      data: null,
+    });
+  }
+
+  if (!userEmail) {
+    return res.status(STATUS_CODE.BAD_REQUEST).json({
+      status: STATUS_CODE.BAD_REQUEST,
+      message: STATUS_MESSAGE.REQUIRED_EMAIL,
+      data: null,
+    });
+  }
+
+  if (!userPw) {
+    return res.status(STATUS_CODE.BAD_REQUEST).json({
+      status: STATUS_CODE.BAD_REQUEST,
+      message: STATUS_MESSAGE.REQUIRED_PASSWORD,
+      data: null,
+    });
+  }
+
+  if (!userPhone) {
+    return res.status(STATUS_CODE.BAD_REQUEST).json({
+      status: STATUS_CODE.BAD_REQUEST,
+      message: STATUS_MESSAGE.REQUIRED_PHONE,
+      data: null,
+    });
+  }
+
+  if (!userAddress) {
+    return res.status(STATUS_CODE.BAD_REQUEST).json({
+      status: STATUS_CODE.BAD_REQUEST,
+      message: STATUS_MESSAGE.REQUIRED_ADDRESS,
+      data: null,
+    });
+  }
+
+  // if (!validEmail(userEmail)) {
+  //   return res.status(STATUS_CODE.BAD_REQUEST).json({
+  //     status: STATUS_CODE.BAD_REQUEST,
+  //     message: STATUS_MESSAGE.invalid_email,
+  //     data: null,
+  //   });
+  // }
+
+  // if (!validNickname(userNickname)) {
+  //   return res.status(STATUS_CODE.BAD_REQUEST).json({
+  //     status: STATUS_CODE.BAD_REQUEST,
+  //     message: STATUS_MESSAGE.INVALID_NICKNAME,
+  //     data: null,
+  //   });
+  // }
+
+  // if (!validPassword(userPw)) {
+  //   return res.status(STATUS_CODE.BAD_REQUEST).json({
+  //     status: STATUS_CODE.BAD_REQUEST,
+  //     message: STATUS_MESSAGE.INVALID_PASSWORD,
+  //     data: null,
+  //   });
+  // }
+
+  const requsetData = {
+    userName: userName,
+    userNickname: userNickname,
+    userEmail: userEmail,
+    userPw: userPw,
+    userPhone: userPhone,
+    userAddress: userAddress,
+  };
+
   try {
+    const response = await userModel.userSignup(requsetData);
+
+    if (response.length === 0) {
+      return res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).json({
+        status: STATUS_CODE.INTERNAL_SERVER_ERROR,
+        message: STATUS_MESSAGE.INTERNAL_SERVER_ERROR,
+        data: null,
+      });
+    }
+
+    return res.status(STATUS_CODE.CREATED).json({
+      status: STATUS_CODE.CREATED,
+      message: STATUS_MESSAGE.SIGNUP_SUCCESS,
+      data: null,
+    });
   } catch (err) {
     console.log(err);
+
+    return res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).json({
+      status: STATUS_CODE.INTERNAL_SERVER_ERROR,
+      message: STATUS_MESSAGE.INTERNAL_SERVER_ERROR,
+      data: null,
+    });
   }
 };

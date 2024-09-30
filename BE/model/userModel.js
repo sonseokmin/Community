@@ -6,6 +6,7 @@ const dbConnect = require("../database/index.js");
  * 로그인
  * 유저 정보
  * 유저 게시글 확인
+ * 이메일 중복 체크
  * 회원가입
  */
 
@@ -70,11 +71,64 @@ exports.checkUserPost = async (req) => {
   return result;
 };
 
+// 이메일 중복 체크
+exports.checkSignupEmail = async (req) => {
+  const requestData = [req];
+
+  const sql = `
+  SELECT 
+    CASE 
+        WHEN EXISTS (SELECT 1 FROM users WHERE email = ?) THEN TRUE
+        ELSE FALSE
+    END AS email_exists;
+
+  `;
+  const [result] = await dbConnect.query(sql, requestData);
+
+  if (!result) {
+    return null;
+  }
+
+  return result;
+};
+
+// 닉네임 중복 체크
+exports.checkSignupNickname = async (req) => {
+  const requestData = [req];
+
+  const sql = `
+  SELECT 
+    CASE 
+        WHEN EXISTS (SELECT 1 FROM users WHERE nickname = ?) THEN TRUE
+        ELSE FALSE
+    END AS nickname_exists;
+
+  `;
+  const [result] = await dbConnect.query(sql, requestData);
+
+  if (!result) {
+    return null;
+  }
+
+  return result;
+};
+
 // 회원가입
 exports.userSignup = async (req) => {
-  const requestData = [req.userId, req.userPw, req.userName];
+  const requestData = [
+    req.userName,
+    req.userEmail,
+    req.userPw,
+    req.userNickname,
+    req.userPhone,
+    req.userAddress,
+  ];
 
-  const sql = "";
+  const sql = `
+  INSERT
+  INTO users (username, email, password, nickname, phone, address)
+  VALUES (?, ?, ?, ?, ?, ?)
+  `;
 
   const [result] = await dbConnect.query(sql, requestData);
 
