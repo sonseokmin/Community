@@ -18,4 +18,10 @@ router.post(
 
 router.post("/community/user/signup", userController.userSignup); // 회원가입
 
+router.post("/community/auth/verify-password", userController.verifyPassword); // 비밀번호 확인
+
+router.put("/community/user/update", userController.userUpdate); // 정보 수정
+
+router.delete("/community/user/delete", userController.userDelete);
+
 module.exports = router;

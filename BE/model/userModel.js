@@ -8,6 +8,7 @@ const dbConnect = require("../database/index.js");
  * 유저 게시글 확인
  * 이메일 중복 체크
  * 회원가입
+ * 비밀번호 확인
  */
 
 // 로그인
@@ -131,6 +132,78 @@ exports.userSignup = async (req) => {
   `;
 
   const [result] = await dbConnect.query(sql, requestData);
+
+  if (!result) {
+    return null;
+  }
+
+  return result;
+};
+
+// 비밀번호 확인
+exports.verifyPassword = async (req) => {
+  const requestData = [req.userId, req.userPassword];
+  const sql = `
+  SELECT 
+    CASE 
+        WHEN EXISTS (SELECT 1 FROM users WHERE id = ? AND password = ?) THEN TRUE
+        ELSE FALSE
+    END AS check_pw;
+
+  
+  `;
+  const [result] = await dbConnect.query(sql, requestData);
+
+  if (!result) {
+    return null;
+  }
+
+  return result;
+};
+
+// 정보 수정
+exports.userUpdate = async (req) => {
+  const requestData = [
+    req.userNickname,
+    req.userPhone,
+    req.userAddress,
+    req.userId,
+  ];
+
+  const sql = `
+  UPDATE  users
+  SET nickname = ?, phone = ?, address = ?
+  WHERE id = ?
+  `;
+
+  const [result] = await dbConnect.query(sql, requestData);
+
+  if (!result) {
+    return null;
+  }
+
+  return result;
+};
+
+// 회원탈퇴
+exports.userDelete = async (req, res) => {
+  const requestData = [req.userId];
+
+  const PostSql = `
+  DELETE 
+  FROM posts
+  WHERE user_id = ?;
+  `;
+
+  await dbConnect.query(PostSql, requestData);
+
+  const sql = `
+  DELETE 
+  FROM users
+  WHERE id = ?;
+  `;
+
+  const result = await dbConnect.query(sql, requestData);
 
   if (!result) {
     return null;

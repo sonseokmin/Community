@@ -19,6 +19,8 @@ const {
  * 이메일 중복 체크
  * 닉네임 중복 체크
  * 회원가입
+ * 비밀번호 확인
+ * 유저 업데이트
  */
 
 // 로그인
@@ -147,7 +149,10 @@ exports.checkLoginState = async (req, res) => {
         data: {
           id: response[0].id,
           userName: response[0].username,
+          nickname: response[0].nickname,
           email: response[0].email,
+          phone: response[0].phone,
+          address: response[0].address,
         },
       });
       //쿠키 존재하지 않을 경우
@@ -373,6 +378,188 @@ exports.userSignup = async (req, res) => {
   } catch (err) {
     console.log(err);
 
+    return res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).json({
+      status: STATUS_CODE.INTERNAL_SERVER_ERROR,
+      message: STATUS_MESSAGE.INTERNAL_SERVER_ERROR,
+      data: null,
+    });
+  }
+};
+
+// 비밀번호 확인
+exports.verifyPassword = async (req, res) => {
+  const { password: password } = req.body;
+
+  if (!password) {
+    return res.status(STATUS_CODE.BAD_REQUEST).json({
+      status: STATUS_CODE.BAD_REQUEST,
+      message: STATUS_MESSAGE.REQUIRED_PASSWORD,
+      data: null,
+    });
+  }
+
+  if (!req.session.userId) {
+    return res.status(STATUS_CODE.UNAUTHORIZED).json({
+      status: STATUS_CODE.UNAUTHORIZED,
+      message: STATUS_MESSAGE.NOT_LOGIN,
+      data: null,
+    });
+  }
+
+  try {
+    const requestData = {
+      userPassword: req.body.password,
+      userId: req.session.userId,
+    };
+
+    const response = await userModel.verifyPassword(requestData);
+
+    if (response.length === 0) {
+      return res.status(STATUS_CODE.NOT_FOUND).json({
+        status: STATUS_CODE.NOT_FOUND,
+        message: STATUS_MESSAGE.INVALID_PASSWORD,
+        data: null,
+      });
+    }
+
+    if (response[0].check_pw === 1) {
+      return res.status(STATUS_CODE.OK).json({
+        status: STATUS_CODE.OK,
+        message: STATUS_MESSAGE.IS_USER,
+        check: true,
+      });
+    } else {
+      return res.status(STATUS_CODE.OK).json({
+        status: STATUS_CODE.OK,
+        message: STATUS_MESSAGE.IS_NOT_USER,
+        check: false,
+      });
+    }
+  } catch (err) {
+    console.error(err);
+
+    return res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).json({
+      status: STATUS_CODE.INTERNAL_SERVER_ERROR,
+      message: STATUS_MESSAGE.INTERNAL_SERVER_ERROR,
+      data: null,
+    });
+  }
+};
+
+// 유저 업데이트
+exports.userUpdate = async (req, res) => {
+  const {
+    userNickname: userNickname,
+    userPhone: userPhone,
+    userAddress: userAddress,
+    userPassword: userPassword,
+  } = req.body;
+
+  if (!userNickname) {
+    return res.status(STATUS_CODE.BAD_REQUEST).json({
+      status: STATUS_CODE.BAD_REQUEST,
+      message: STATUS_MESSAGE.REQUIRED_NICKNAME,
+      data: null,
+    });
+  }
+
+  if (!userPassword) {
+    return res.status(STATUS_CODE.BAD_REQUEST).json({
+      status: STATUS_CODE.BAD_REQUEST,
+      message: STATUS_MESSAGE.REQUIRED_PASSWORD,
+      data: null,
+    });
+  }
+
+  if (!userPhone) {
+    return res.status(STATUS_CODE.BAD_REQUEST).json({
+      status: STATUS_CODE.BAD_REQUEST,
+      message: STATUS_MESSAGE.REQUIRED_PHONE,
+      data: null,
+    });
+  }
+
+  if (!userAddress) {
+    return res.status(STATUS_CODE.BAD_REQUEST).json({
+      status: STATUS_CODE.BAD_REQUEST,
+      message: STATUS_MESSAGE.REQUIRED_ADDRESS,
+      data: null,
+    });
+  }
+
+  try {
+    const checkRequestData = {
+      userId: req.session.userId,
+      userPassword: userPassword,
+    };
+
+    const checkResponse = await userModel.verifyPassword(checkRequestData);
+
+    if (checkResponse[0].check_pw === 1) {
+      const updateRequestData = {
+        userId: req.session.userId,
+        userNickname: userNickname,
+        userPhone: userPhone,
+        userAddress: userAddress,
+      };
+
+      const updateResponse = await userModel.userUpdate(updateRequestData);
+
+      return res.status(STATUS_CODE.OK).json({
+        status: STATUS_CODE.OK,
+        message: STATUS_MESSAGE.UPDATE_USER_DATA_SUCCESS,
+        data: null,
+      });
+    }
+
+    return res.status(STATUS_CODE.UNAUTHORIZED).json({
+      status: STATUS_CODE.UNAUTHORIZED,
+      message: STATUS_MESSAGE.INVALID_PASSWORD,
+      data: null,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).json({
+      status: STATUS_CODE.INTERNAL_SERVER_ERROR,
+      message: STATUS_MESSAGE.INTERNAL_SERVER_ERROR,
+      data: null,
+    });
+  }
+};
+
+exports.userDelete = async (req, res) => {
+  if (!req.session.userId) {
+    return res.status(STATUS_CODE.NOT_FOUND).json({
+      status: STATUS_CODE.NOT_FOUND,
+      message: STATUS_MESSAGE.NOT_FOUND_USER,
+      data: null,
+    });
+  }
+
+  try {
+    const requestData = {
+      userId: req.session.userId,
+    };
+
+    const response = await userModel.userDelete(requestData);
+
+    if (response.length === 0) {
+      return res.status(STATUS_CODE.NOT_FOUND).json({
+        status: STATUS_CODE.NOT_FOUND,
+        message: STATUS_MESSAGE.NOT_FOUND_USER,
+        data: null,
+      });
+    }
+
+    res.clearCookie("connect.sid");
+
+    return res.status(STATUS_CODE.OK).json({
+      status: STATUS_CODE.OK,
+      message: STATUS_MESSAGE.DELETE_USER_DATA_SUCCESS,
+      data: null,
+    });
+  } catch (err) {
+    console.error(err);
     return res.status(STATUS_CODE.INTERNAL_SERVER_ERROR).json({
       status: STATUS_CODE.INTERNAL_SERVER_ERROR,
       message: STATUS_MESSAGE.INTERNAL_SERVER_ERROR,

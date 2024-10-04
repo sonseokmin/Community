@@ -15,7 +15,7 @@ exports.getPosts = async (req) => {
   const boardType = req;
 
   const sql = `
-  SELECT posts.id, posts.title, posts.content, posts.type, users.username
+  SELECT posts.id, posts.title, posts.content, posts.type, users.nickname
   FROM users
   INNER JOIN posts ON users.id = posts.user_id AND type = ?;
   `;

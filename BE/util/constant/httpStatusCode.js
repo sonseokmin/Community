@@ -44,6 +44,10 @@ const STATUS_MESSAGE = {
 
   SIGNUP_FAILED: "signup_failed",
   UPDATE_PROFILE_IMAGE_FAILED: "update_profile_image_failed",
+  IS_USER: "is_user",
+  IS_NOT_USER: "is_not_user",
+
+  NOT_LOGIN: "not_login",
 
   LOGIN_SUCCESS: "login_success",
   LOGOUT_SUCCESS: "logout_success",
