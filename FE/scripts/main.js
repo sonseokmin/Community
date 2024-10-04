@@ -38,8 +38,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   const checkLogin = await checkLoginState();
 
   if (checkLogin.loggedIn === true) {
-    const userName = checkLogin.data.userName; // 쿠키에서 유저 이름 얻음
-
+    const userNickname = checkLogin.data.nickname; // 쿠키에서 유저 이름 얻음
+    console.log(userNickname);
     const loginButton = document.getElementById("login"); // 로그인 버튼 요소
 
     // 유저 정보와 로그아웃 버튼을 담을 div 생성
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const userInfo = document.createElement("a"); // 유저 이름을 나타낼 요소 생성
     userInfo.href = "info.html";
     userInfo.className = "user-name"; // 클래스 추가
-    userInfo.innerText = `${userName} 님`; // 요소에 유저 이름 할당
+    userInfo.innerText = `${userNickname} 님`; // 요소에 유저 이름 할당
 
     // 로그아웃 버튼 생성
     const logoutButton = document.createElement("button");
@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         postContent.innerText = data.content;
 
         const postUser = document.createElement("span");
-        postUser.innerText = data.username;
+        postUser.innerText = data.nickname;
 
         const li = document.createElement("li");
 

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>정보 수정</title>
+    <link rel="stylesheet" href="../styles/updateInfo.css" />
+    <script type="module" src="../scripts/updateInfo.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h2>정보 수정</h2>
+
+      <form id="updateForm">
+        <!-- 이름 -->
+        <div class="form-group">
+          <label for="username">이름</label>
+          <input
+            type="text"
+            id="username"
+            placeholder="이름을 입력하세요"
+            required
+            readonly
+          />
+        </div>
+
+        <!-- 닉네임 -->
+        <div class="form-group">
+          <label for="nickname">닉네임</label>
+          <input
+            type="text"
+            id="nickname"
+            placeholder="닉네임을 입력하세요"
+            required
+          />
+        </div>
+
+        <!-- 이메일 (readonly, 수정 불가) -->
+        <div class="form-group">
+          <label for="email">이메일</label>
+          <input type="email" id="email" readonly value="user@example.com" />
+        </div>
+
+        <!-- 전화번호 -->
+        <div class="form-group">
+          <label for="phone">전화번호</label>
+          <input
+            type="tel"
+            id="phone"
+            placeholder="전화번호를 입력하세요"
+            required
+          />
+        </div>
+
+        <!-- 주소 -->
+        <div class="form-group">
+          <label for="address">주소</label>
+          <input
+            type="text"
+            id="address"
+            placeholder="주소를 입력하세요"
+            required
+          />
+        </div>
+
+        <!-- 비밀번호 확인 -->
+        <div class="form-group">
+          <label for="password">비밀번호 확인</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="비밀번호를 입력하세요"
+            required
+          />
+        </div>
+
+        <!-- 수정 및 돌아가기 버튼 -->
+        <div class="form-actions">
+          <button id="user-update" type="submit">수정하기</button>
+          <button type="button" onclick="window.location.href = `info.html`">
+            돌아가기
+          </button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

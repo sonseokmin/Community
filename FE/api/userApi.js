@@ -7,6 +7,7 @@
  * 유저 게시글 확인
  * 이메일 중복 체크
  * 회원가입
+ * 유저 확인
  */
 
 // 기본 URL
@@ -124,10 +125,61 @@ export async function userSignup(requestData) {
       },
       body: JSON.stringify(requestData),
     });
-    console.log(response);
 
     return response.json();
   } catch (err) {
     console.error("회원가입 도중 에러 발생");
+  }
+}
+
+// 유저 확인
+export async function verifyPassword(requestData) {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/community/auth/verify-password`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // JSON 형식의 데이터임을 명시
+        },
+        credentials: "include", // 쿠키를 포함하여 요청
+        body: JSON.stringify(requestData),
+      }
+    );
+    return response.json();
+  } catch (err) {
+    console.error("유저 확인 요청 에러 발생", err.message);
+  }
+}
+
+// 유저 업데이트
+export async function userUpdate(requestData) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/community/user/update`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json", // JSON 형식의 데이터임을 명시
+      },
+      body: JSON.stringify(requestData),
+      credentials: "include", // 쿠키를 포함하여 요청
+    });
+
+    return response;
+  } catch (err) {
+    console.error("유저 업데이트 요청 에러 발생", err.message);
+    throw err;
+  }
+}
+
+// 회원탈퇴
+export async function userDelete() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/community/user/delete`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+    return response.json();
+  } catch (err) {
+    console.error("DELETE 요청 에러 발생", err.message);
   }
 }
